@@ -183,16 +183,69 @@ function generateRSS()
         *
         * chapter file has to be present in media folder, under the name: [filename].chapters
         *
+        * Format of .chapters file:
+        * .csv with columns: start, title
+        * start format: hh:mm:ss.mss OR seconds
+        *
         */
         if(file_exists($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters')) {
             // chapter file exists
 
-            $chapters = file_get_contents($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters');
-            if($chapters !== "") {
-                $item .= $indent . '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">' . $linebreak 
-                    . $indent . "\t" . str_replace("\n", "\n" . $indent . "\t", $chapters) . $linebreak 
-                    . $indent . '</psc:chapters>' . $linebreak;
+            if(($open = fopen($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters', "r")) !== FALSE) {
+                
+                $item .= $indent . '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">' . $linebreak;
+
+                $iStart=-1;
+                $iTitle=-1;
+
+                while (($data = fgetcsv($open)) !== FALSE) {
+                    if($iStart===-1 && $iTitle===-1) {
+                        for($i = 0; $i < count($data); $i++) {
+                            if($data[$i] === "start") $iStart = $i;
+                            elseif($data[$i] === "title") $iTitle = $i;
+                        }
+                        if($iStart===-1 || $iTitle===-1)
+                            break;
+                        continue;
+                    }
+
+                    if($data[0] === null)
+                        continue;
+
+                    if($iStart===-1 || $iTitle===-1)
+                        break;
+
+                    $start = "00:00:00.000";
+                    
+                    if(is_numeric($data[$iStart])) {
+                        // bring start time in format hh:mm:ss.ms
+                        $start = sprintf('%02d:%02d:%02d.%03d', ($data[$iStart]/3600), ($data[$iStart]/60%60), ($data[$iStart]%60), ($data[$iStart]%1));
+                        
+                        if($start===null) $start = "00:00:00.000";
+                    } else {
+                        if(sscanf($data[$iStart], '%02d:%02d:%02d.%03d') !== null) {
+                            $start = $data[$iStart];
+                        }
+                    }
+
+                    $title = $data[$iTitle];
+
+                    // write to rss
+                    $item .= $indent . "\t" . "<psc:chapter start=\"" . $start . "\" title=\"" . $title . "\"/>" . $linebreak;
+                    
+                }
+
+                $item .= $indent . '</psc:chapters>' . $linebreak;
+
+                fclose($open);
             }
+
+            //$chapters = file_get_contents($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters');
+            //if($chapters !== "") {
+            //    $item .= $indent . '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">' . $linebreak 
+            //        . $indent . "\t" . str_replace("\n", "\n" . $indent . "\t", $chapters) . $linebreak 
+            //        . $indent . '</psc:chapters>' . $linebreak;
+            //}
         }
 
         
