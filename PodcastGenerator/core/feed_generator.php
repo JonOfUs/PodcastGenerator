@@ -179,16 +179,19 @@ function generateRSS()
         $item .= $indent . '<pubDate>' . date("r", $files[$i]['lastModified']) . '</pubDate>' . $linebreak;
         
         /*
-        * [filename].chapters
+        * Chapter support
+        *
+        * chapter file has to be present in media folder, under the name: [filename].chapters
+        *
         */
-
-        //TODO: insert psc:chapter/s here
         if(file_exists($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters')) {
             // chapter file exists
 
             $chapters = file_get_contents($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters');
             if($chapters !== "") {
-                $item .= $indent . '<psc:chapters version="1.2">' . $linebreak . $chapters . $linebreak . '</psc:chapters>' . $linebreak;
+                $item .= $indent . '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">' . $linebreak 
+                    . $indent . "\t" . str_replace("\n", "\n" . $indent . "\t", $chapters) . $linebreak 
+                    . $indent . '</psc:chapters>' . $linebreak;
             }
         }
 
