@@ -177,6 +177,22 @@ function generateRSS()
             $item .= $indent . '<itunes:image href="' . $has_cover . '" />' . $linebreak;
         }
         $item .= $indent . '<pubDate>' . date("r", $files[$i]['lastModified']) . '</pubDate>' . $linebreak;
+        
+        /*
+        * [filename].chapters
+        */
+
+        //TODO: insert psc:chapter/s here
+        if(file_exists($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters')) {
+            // chapter file exists
+
+            $chapters = file_get_contents($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters');
+            if($chapters !== "") {
+                $item .= $indent . '<psc:chapters version="1.2">' . $linebreak . $chapters . $linebreak . '</psc:chapters>' . $linebreak;
+            }
+        }
+
+        
         $item .= "\t\t</item>\n";
         // Push XML to the real XML
         array_push($items, $item);
