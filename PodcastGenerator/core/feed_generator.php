@@ -193,9 +193,6 @@ function generateRSS()
 
             if(($content = file_get_contents($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.chapters', "r")) !== FALSE) {
                 
-                // repair umlauts
-                $content=utf8_encode($content);
-
                 $item .= $indent . '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">' . $linebreak;
                 
                 foreach(explode("\n", $content) as $line) {
@@ -205,8 +202,9 @@ function generateRSS()
                     }
                     
                     $seconds=substr($line, 0, strpos($line, ","));
-                    // mb_substr for umlauts
                     $title=substr($line, strpos($line, ",")+1, strlen($line));
+                    // sanitize, because rss-xml has problems with &
+                	$title = str_replace("&", "+", $title);
 
                     if($seconds === "start")
                         continue;
