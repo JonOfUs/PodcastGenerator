@@ -28,9 +28,7 @@
                         <?php } ?>
                     </div>
                 </div>
-            <?php } else {
-                include 'listepisodes.php';
-            } ?>
+            <?php } else { include 'listepisodes.php'; } ?>
         </div>
     </div>
 </body>

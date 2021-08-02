@@ -1,5 +1,4 @@
 <?php
-
 ############################################################
 # PODCAST GENERATOR
 #
@@ -13,9 +12,7 @@ function pingWebSub()
     // Get the global config
     global $config;
     // Exit early if no WebSub service isn't set up
-    if (!$config['websub_server']) {
-        return;
-    }
+    if (!$config['websub_server']) { return; }
     // Log an error and exit early if cURL is unavailable
     if (!function_exists('curl_init')) {
         error_log("cURL functions are not available.", 0);
@@ -38,19 +35,18 @@ function pingWebSub()
         if (function_exists('curl_setopt_array')) {
             curl_setopt_array($handle, $opts);
         } else {
-            foreach ($opts as $opt => $val) {
+            foreach ($opts as $opt => $val)
                 curl_setopt($handle, $opt, $val);
-            }
         }
         return curl_exec($handle);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         // write a warning to stderr, but don't blow anything up
         error_log($e, 0);
         return false;
-    } finally {
-        if ($handle) {
-            curl_close($handle);
-        }
+    }
+    finally {
+        if ($handle) curl_close($handle);
     }
 }
 

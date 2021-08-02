@@ -37,7 +37,8 @@
                 $config["url"] . $config["img_dir"] . $correctepisode["episode"]["fileid"] . '.png' :
                 $config["url"] . $config["img_dir"] . $correctepisode["episode"]["fileid"] . '.jpg';
             $img = $filename;
-        } ?>
+        }
+    ?>
         <meta property="og:title" content="<?= $config["podcast_title"] . ' - ' . $correctepisode["episode"]["titlePG"] ?>" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="'<?= $config["url"] . 'index.php?name=' . $correctepisode["episode"]["filename"] ?>" />
@@ -47,9 +48,8 @@
         <?php if (strtolower($config["enablestreaming"]) == "yes") {
             // Get mime
             $mime = getmime($config["absoluteurl"] . $config["upload_dir"] . $correctepisode["episode"]["filename"]);
-            if (!$mime) {
+            if (!$mime)
                 $mime = null;
-            }
             $type = '';
             if (substr($mime, 0, 5) == 'video') {
                 $type = 'video';
