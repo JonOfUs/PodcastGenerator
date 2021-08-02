@@ -57,8 +57,8 @@ if (isset($_GET['edit'])) {
             <?= _('Use cron to regenerate the RSS feed') ?>:<br>
             <input type="text" value="<?= htmlspecialchars($config['url']) . "pg-cron.php?key=" . htmlspecialchars($config['installationKey']) ?>" style="width: 100%;" readonly><br>
             <hr>
-            <?= _('BasicAuth credentials for the whole podcast') ?>:<br>
-            <small><?= _('When activated (Yes), BasicAuth credentials will be inserted into every URL in podcast feeds.') ?></small><br>
+            <?= _('BasicAuth credentials') ?>:<br>
+            <small><?= _('When enabled, BasicAuth credentials will be inserted into every URL in podcast feeds. Important: This wil NOT activate BasicAuth, one can only insert credentials to a existing BasicAuth.') ?></small><br>
             <input type="radio" name="basicauth_enabled" value="yes" <?= $config['basicauth_enabled'] == 'yes' ? 'checked' : '' ?>> <?= _('Yes'); ?>
             <input type="radio" name="basicauth_enabled" value="no" <?= $config['basicauth_enabled'] != 'yes' ? 'checked' : '' ?>> <?= _('No') ?><br>
             <small><?= _('Username') ?>:</small><br>
