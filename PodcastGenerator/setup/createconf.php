@@ -73,6 +73,12 @@ function createconf($username, $password) {
 
 \$podcastPassword = '';       // Password to protect the podcast generator webpages, this will NOT protect the audio or XML files. Leave blank to disable.
 
+\$basicauth_enabled = \"no\";     // Insert BasicAuth credentials into links in feed.xml
+
+\$basicauth_user = \"\";
+
+\$basicauth_pass = \"\";
+
 #####################
 # XML Feed stuff
 
