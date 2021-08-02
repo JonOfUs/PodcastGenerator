@@ -206,7 +206,7 @@ function generateRSS()
                     
                     $seconds=substr($line, 0, strpos($line, ","));
                     // mb_substr for umlauts
-                    $title=mb_substr($line, strpos($line, ",")+1, strlen($line));
+                    $title=substr($line, strpos($line, ",")+1, strlen($line));
 
                     if($seconds === "start")
                         continue;
