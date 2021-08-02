@@ -247,10 +247,3 @@ function generateRSS()
     $xml .= $feedfooter;
     return file_put_contents($config['absoluteurl'] . $config['feed_dir'] .  'feed.xml', $xml);
 }
-
-function toASCII( $str )
-{
-    return strtr(utf8_decode($str), 
-        utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
-                    'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy');
-}
