@@ -57,15 +57,6 @@ if (isset($_GET['edit'])) {
             <?= _('Use cron to regenerate the RSS feed') ?>:<br>
             <input type="text" value="<?= htmlspecialchars($config['url']) . "pg-cron.php?key=" . htmlspecialchars($config['installationKey']) ?>" style="width: 100%;" readonly><br>
             <hr>
-            <?= _('BasicAuth credentials for the whole podcast') ?>:<br>
-            <small><?= _('When activated (Yes), BasicAuth credentials will be inserted into every URL in podcast feeds.') ?></small><br>
-            <input type="radio" name="basicauth_enabled" value="yes" <?= $config['basicauth_enabled'] == 'yes' ? 'checked' : '' ?>> <?= _('Yes'); ?>
-            <input type="radio" name="basicauth_enabled" value="no" <?= $config['basicauth_enabled'] != 'yes' ? 'checked' : '' ?>> <?= _('No') ?><br>
-            <small><?= _('Username') ?>:</small><br>
-            <input type="text" name="basicauth_user" value="<?= $config['basicauth_user'] ?>"><br>
-            <small><?= _('Password') ?>:</small><br>
-            <input type="text" name="basicauth_pass" value="<?= $config['basicauth_pass'] ?>"><br>
-            <hr>
             <?= _('Password Protection for the web pages') ?>:<br>
             <small><?= _('Leave empty for no password, keep in mind that the feed and the audio files will still be accessible no matter if a password is set or not') ?></small><br>
             <input type="text" name="podcastPassword" value="<?= $config['podcastPassword'] ?>"><br>

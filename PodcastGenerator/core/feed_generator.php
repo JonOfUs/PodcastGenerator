@@ -28,18 +28,21 @@ function generateRSS()
     if (!is_dir($config['absoluteurl'] . $config['feed_dir'])) {
         mkdir($config['absoluteurl'] . $config['feed_dir']);
     }
+<<<<<<< HEAD
     $url=$config['url'];
     if($config['basicauth_enabled'] == 'yes') { // Add basicauth data
         $url=str_replace('://', '://' . $config['basicauth_user'] . ':' . $config['basicauth_pass'] . '@', $url);
     }
+=======
+>>>>>>> parent of b510714 (Enable BasicAuth support for feed.xml)
     // Set the feed header with relevant podcast informations
     $feedhead = '<?xml version="1.0" encoding="' . $config['feed_encoding'] . '"?>
     <!-- generator="Podcast Generator ' . $version . '" -->
     <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xml:lang="' . $config['feed_language'] . '" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>' . htmlspecialchars($config['podcast_title']) . '</title>
-		<link>' . $url . '</link>
-		<atom:link href="' . $url . 'feed.xml" rel="self" type="application/rss+xml" />
+		<link>' . $config['url'] . '</link>
+		<atom:link href="' . $config['url'] . 'feed.xml" rel="self" type="application/rss+xml" />
 		<description>' . htmlspecialchars($config['podcast_description']) . '</description>
 		<generator>Podcast Generator ' . $version . ' - http://www.podcastgenerator.net</generator>
 		<lastBuildDate>' . date('r') . '</lastBuildDate>
@@ -47,11 +50,11 @@ function generateRSS()
 		<copyright>' . htmlspecialchars($config['copyright']) . '</copyright>
 		<managingEditor>' . htmlspecialchars($config['author_email']) . '</managingEditor>
 		<webMaster>' . htmlspecialchars($config['webmaster']) . '</webMaster>
-		<itunes:image href="' . $url . $config['img_dir'] . 'itunes_image.jpg" />
+		<itunes:image href="' . $config['url'] . $config['img_dir'] . 'itunes_image.jpg" />
 		<image>
-			<url>' . $url . $config['img_dir'] . 'itunes_image.jpg</url>
+			<url>' . $config['url'] . $config['img_dir'] . 'itunes_image.jpg</url>
 			<title>' . htmlspecialchars($config['podcast_title']) . '</title>
-			<link>' . $url . '</link>
+			<link>' . $config['url'] . '</link>
 		</image>
 		<itunes:summary>' . htmlspecialchars($config['podcast_description']) . '</itunes:summary>
 		<itunes:subtitle>' . htmlspecialchars($config['podcast_subtitle']) . '</itunes:subtitle>
@@ -124,7 +127,7 @@ function generateRSS()
         $link = str_replace('?', '', $config['link']);
         $link = str_replace('=', '', $link);
         $link = str_replace('$url', '', $link);
-        $original_full_filepath = $url . $config['upload_dir'] . str_replace(' ', '%20', $files[$i]['filename']);
+        $original_full_filepath = $config['url'] . $config['upload_dir'] . str_replace(' ', '%20', $files[$i]['filename']);
         $file = simplexml_load_file($config['absoluteurl'] . $config['upload_dir'] . pathinfo($config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME) . '.xml');
         // Skip files with no read permission
         $mimetype = getmime($config['absoluteurl'] . $config['upload_dir'] . $files[$i]['filename']);
@@ -141,9 +144,12 @@ function generateRSS()
         }
         // Generate GUID if a pregenerated GUID is missing for the episode
         $guid = isset($file->episode->guid) ? $file->episode->guid : $config['url'] . "?" . $link . "=" . $files[$i]['filename'];
+<<<<<<< HEAD
         if($config['basicauth_enabled'] == 'yes') { // Add basicauth data
             $guid=str_replace($config['url'], $url, $guid);
         }
+=======
+>>>>>>> parent of b510714 (Enable BasicAuth support for feed.xml)
         // Check if this episode has a cover art
         $basename = pathinfo($config['absoluteurl'] . $config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME);
         $has_cover = false;
@@ -151,7 +157,7 @@ function generateRSS()
             $has_cover = $file->episode->imgPG;
         elseif (file_exists($config['absoluteurl'] . $config['img_dir'] . $basename . '.jpg') || file_exists($config['absoluteurl'] . $config['img_dir'] . $basename . '.png')) {
             $ext = file_exists($config['absoluteurl'] . $config['img_dir'] . $basename . '.png') ? '.png' : '.jpg';
-            $has_cover = $url . $config['img_dir'] . $basename . $ext;
+            $has_cover = $config['url'] . $config['img_dir'] . $basename . $ext;
         }
         $indent = "\t\t\t";
         $linebreak = "\n";
@@ -163,7 +169,7 @@ function generateRSS()
         if ($file->episode->longdescPG != "") {
             $item .= $indent . '<itunes:summary><![CDATA[' . $file->episode->longdescPG . ']]></itunes:summary>' . $linebreak;
         }
-        $item .= $indent . '<link>' . $url . '?' . $link . '=' . $files[$i]['filename'] . '</link>' . $linebreak;
+        $item .= $indent . '<link>' . $config['url'] . '?' . $link . '=' . $files[$i]['filename'] . '</link>' . $linebreak;
         $item .= $indent . '<enclosure url="' . $original_full_filepath . '" length="' . filesize($config['absoluteurl'] . $config['upload_dir'] . $files[$i]['filename']) . '" type="' . $mimetype . '"></enclosure>' . $linebreak;
         $item .= $indent . '<guid>' . $guid . '</guid>' . $linebreak;
         $item .= $indent . '<itunes:duration>' . $file->episode->fileInfoPG->duration . '</itunes:duration>' . $linebreak;
