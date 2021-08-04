@@ -141,9 +141,6 @@ function generateRSS()
         }
         // Generate GUID if a pregenerated GUID is missing for the episode
         $guid = isset($file->episode->guid) ? $file->episode->guid : $config['url'] . "?" . $link . "=" . $files[$i]['filename'];
-        if($config['basicauth_enabled'] == 'yes') { // Add basicauth data
-            $guid=str_replace($config['url'], $url, $guid);
-        }
         // Check if this episode has a cover art
         $basename = pathinfo($config['absoluteurl'] . $config['upload_dir'] . $files[$i]['filename'], PATHINFO_FILENAME);
         $has_cover = false;
