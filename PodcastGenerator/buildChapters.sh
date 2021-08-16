@@ -54,7 +54,7 @@ fi
 path=$input_param
 filename=$filename_param
 
-total_seconds=0
+duration=0.0
 
 # output format: "start,title\n501,SomeTitle\n603,SomeOtherTitle\n...
 
@@ -66,38 +66,18 @@ IFS=$(echo -en "\n\b")
 
 for file in ${path}*.mp3
 do
-
-  hours=$((total_seconds / 3600))
-  minutes=$(( (total_seconds % 3600) / 60))
-  seconds=$((total_seconds % 60))
-  msecs="000"
-
-  if [ $hours -lt 10 ] 
-  then
-    hours="0${hours}"
-  fi
-  if [ $minutes -lt 10 ] 
-  then
-    minutes="0${minutes}"
-  fi
-  if [ $seconds -lt 10 ] 
-  then
-    seconds="0${seconds}"
-  fi
   
   # remove path, .mp3 ext & strToReplace from filename
   normalized_file=${file##*/}
   normalized_file=${normalized_file/.mp3/}
   normalized_file=${normalized_file/"${strToReplace}"/}
-  #printf "normalized: ${normalized_file}"
 
-  echo "${total_seconds},${normalized_file}" >> "${filename}"
-  #echo "<psc:chapter start=\"${hours}:${minutes}:${seconds}.${msecs}\" title=\"${normalized_file}\"/>" >> "${filename}"
+  printf "%0.3f,${normalized_file}\n" ${duration} >> "${filename}"
+  printf "%0.3f,${normalized_file}\n" ${duration}
 
-  total_seconds=$(($total_seconds + $(mp3info -p '%S' "${file}")))
+  # calculate duration using ffprobe
+  next_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${file}")
+  # add floating point numbers using bc
+  duration=$(echo "${duration} + ${next_duration}" | bc)
 
 done
-
-#total_seconds=$(( $(mp3info -p '%S + ' *.mp3) 0 ))
-
-#printf "%02d:%02d\n" $((total_seconds / 60)) $((total_seconds % 60))
