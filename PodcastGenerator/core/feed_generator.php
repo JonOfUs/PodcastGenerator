@@ -208,7 +208,9 @@ function generateRSS()
                         // bring start time in format hh:mm:ss.ms
                         $start = sprintf('%02d:%02d:%02d.%03d', ($seconds/3600), ($seconds/60%60), ($seconds%60), ($seconds%1));
                         if($start===null) $start = "00:00:00.000";
-                    }
+                    } else {
+		        $start = $time;
+		    }
                     $item .= $indent . "\t" . "<psc:chapter start=\"" . $start . "\" title=\"" . $title . "\"/>" . $linebreak;
                 }
                 $item .= $indent . '</psc:chapters>' . $linebreak;
